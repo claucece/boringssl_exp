@@ -58,6 +58,10 @@ OPENSSL_EXPORT void X25519_public_from_private(uint8_t out_public_value[32],
                                                const uint8_t private_key[32]);
 
 
+OPENSSL_EXPORT void x25519_scalar_add_generic(uint8_t out_1[32], uint8_t out_2[32],
+                          const uint8_t point_1_x[32], const uint8_t point_1_z[32],
+                          const uint8_t point_2_x[32], const uint8_t point_2_z[32]);
+
 // Ed25519.
 //
 // Ed25519 is a signature scheme using a twisted-Edwards curve that is

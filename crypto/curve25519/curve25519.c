@@ -2072,11 +2072,12 @@ static void x25519_scalar_mult_generic(uint8_t out[32],
     fe_mul_tll(&z2, &tmp1l, &tmp0l);
   }
   // here pos=-1, so r=e, so to_xz (e*P) === if swap then (x3, z3) else (x2, z2)
-  fe_cswap(&x2, &x3, swap);
-  fe_cswap(&z2, &z3, swap);
+  fe_cswap(&x2, &x3, swap); // this is the x coordinate in proj -> we will need to save this
+  fe_cswap(&z2, &z3, swap); // this is the z coordinate in proj -> we will need to save this
 
+  // x2 and z2 is the point to return but in projective coordinates
   fe_invert(&z2, &z2);
-  fe_mul_ttt(&x2, &x2, &z2);
+  fe_mul_ttt(&x2, &x2, &z2); // represent the point in affine
   fe_tobytes(out, &x2);
 }
 
@@ -2151,4 +2152,39 @@ void X25519_public_from_private(uint8_t out_public_value[32],
   fe_loose_invert(&zminusy_inv, &zminusy);
   fe_mul_tlt(&zminusy_inv, &zplusy, &zminusy_inv);
   fe_tobytes(out_public_value, &zminusy_inv);
+}
+
+// assumes the input in projective
+void x25519_scalar_add_generic(uint8_t out1[32], uint8_t out2[32],
+                                      const uint8_t point1_x[32], const uint8_t point2_z, const uint8_t point2_x[32], const uint8_t point2_z[32]) {
+  fe x1, x2, z1, z2, x3, z3, tmp0, tmp1;
+  fe_loose x2l, z2l, x3l, tmp0l, tmp1l;
+
+  fe_frombytes(&x1, point1_x);
+  fe_frombytes(&x2, point1_x);
+
+  fe_frombytes(&z1, point1_z);
+  fe_frombytes(&z2, point2_z);
+
+  fe_copy(&x3, &x1);
+  fe_1(&z3);
+
+  fe_add(&x2l, &x2, &z2);
+  fe_sub(&tmp1l, &x2, &z2);
+
+  fe_add(&z2l, &x3, &z3);
+  fe_sub(&tmp0l, &x3, &z3);
+
+  fe_mul_tll(&z3, &tmp0l, &x2l);
+  fe_mul_tll(&z2, &z2l, &tmp1l);
+
+  fe_add(&x3l, &z3, &z2);
+  fe_sub(&z2l, &z3, &z2);
+
+  fe_sq_tl(&x3, &x3l); // we are done per z3 = 1
+  fe_sq_tl(&z2, &z2l);
+  fe_mul_ttt(&z3, &x1, &z2); // probably true
+
+  fe_tobytes(out1, &x3);
+  fe_tobytes(out2, &z3);
 }

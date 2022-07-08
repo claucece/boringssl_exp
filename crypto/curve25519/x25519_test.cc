@@ -68,6 +68,10 @@ TEST(X25519Test, TestVector) {
       0xa1, 0x52, 0xe6, 0xf8, 0xf7, 0x64, 0x7a, 0xac, 0x79, 0x57,
   };
   EXPECT_EQ(Bytes(kExpected2), Bytes(out));
+
+ // uint8_t out1[32];
+ // uint8_t out2[32];
+ // x25519_scalar_add_generic(out1, out2, kPoint1, kPoint2);
 }
 
 TEST(X25519Test, SmallOrder) {
