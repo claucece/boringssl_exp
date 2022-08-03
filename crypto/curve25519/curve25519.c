@@ -2092,17 +2092,17 @@ static void x25519_scalar_mult(uint8_t out[32], const uint8_t scalar[32],
   x25519_scalar_mult_generic(out, scalar, point);
 }
 
-//static void projective_to_affine(uint8_t out_x[32], const uint8_t in_x[32],
-//                                       const uint8_t in_z[32]) {
-//  fe x, z;
-//
-//  fe_frombytes(&x, in_x);
-//  fe_frombytes(&z, in_z);
+void projective_to_affine(uint8_t out_x[32], const uint8_t in_x[32],
+                                 const uint8_t in_z[32]) {
+  fe x, z;
 
-//  fe_invert(&z, &z);
-//  fe_mul_ttt(&x, &x, &z); // represent the point in affine
-//  fe_tobytes(out_x, &x);
-//}
+  fe_frombytes(&x, in_x);
+  fe_frombytes(&z, in_z);
+
+  fe_invert(&z, &z);
+  fe_mul_ttt(&x, &x, &z); // represent the point in affine
+  fe_tobytes(out_x, &x);
+}
 
 //static void affine_to_projective(uint8_t out_x[32], uint8_t out_z[32], const uint8_t in_x[32]) {
 //  fe x, tmp_x, z;
