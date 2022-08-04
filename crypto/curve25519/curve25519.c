@@ -2104,17 +2104,17 @@ void projective_to_affine(uint8_t out_x[32], const uint8_t in_x[32],
   fe_tobytes(out_x, &x);
 }
 
-//static void affine_to_projective(uint8_t out_x[32], uint8_t out_z[32], const uint8_t in_x[32]) {
-//  fe x, tmp_x, z;
+void affine_to_projective(uint8_t out_x[32], uint8_t out_z[32], const uint8_t in_x[32]) {
+  fe x, tmp_x, z;
 
-//  fe_frombytes(&x, in_x);
+  fe_frombytes(&x, in_x);
 
-//  fe_copy(&tmp_x, &x);
-//  fe_1(&z);
+  fe_copy(&tmp_x, &x);
+  fe_1(&z);
 
-//  fe_tobytes(out_x, &tmp_x);
-//  fe_tobytes(out_z, &z);
-//}
+  fe_tobytes(out_x, &tmp_x);
+  fe_tobytes(out_z, &z);
+}
 
 static void x25519_scalar_mult_projective(uint8_t out_x[32], uint8_t out_z[32],
                                        const uint8_t scalar[32],

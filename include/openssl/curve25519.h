@@ -69,6 +69,9 @@ OPENSSL_EXPORT void x25519_scalar_add_generic(uint8_t out_1[32], uint8_t out_2[3
 
 OPENSSL_EXPORT void projective_to_affine(uint8_t out_x[32], const uint8_t in_x[32],
                                          const uint8_t in_z[32]);
+
+OPENSSL_EXPORT void affine_to_projective(uint8_t out_x[32], uint8_t out_z[32], const uint8_t in_x[32]);
+
 // Ed25519.
 //
 // Ed25519 is a signature scheme using a twisted-Edwards curve that is
